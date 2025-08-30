@@ -12,6 +12,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <aspectj.version>1.9.20</aspectj.version> <!-- or whatever version you're using -->
+      <suite-xml>testng.xml</suite-xml>         <!-- assuming you're using TestNG -->
   </properties>
 
   <dependencies>
@@ -104,21 +106,28 @@
       <artifactId>allure-rest-assured</artifactId>
       <version>2.29.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+      <version>${aspectj.version}</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M9</version>
-        <configuration>
-          <suiteXmlFiles>
-            <suiteXmlFile>
-              ${suite}.xml
-            </suiteXmlFile>
-          </suiteXmlFiles>
-        </configuration>
-      </plugin>
-    </plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-surefire-plugin</artifactId>
+      <version>3.0.0-M9</version>
+      <configuration>
+        <suiteXmlFiles>
+          <suiteXmlFile>${suite-xml}</suiteXmlFile>
+        </suiteXmlFiles>
+        <argLine>
+          -javaagent:"${user.home}/.m2/repository/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+        </argLine>
+      </configuration>
+    </plugin>
+
+  </plugins>
   </build>
 </project>
